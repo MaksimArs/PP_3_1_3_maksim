@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<style>
+
+    table {
+        border: 1px solid grey;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td {
+        border: 1px solid grey;
+    }
+
+</style>
+<body>
+<table>
+    <tr>
+        <td align="center"><h1>ID</h1></td>
+        <td align="center"><h1>Username</h1></td>
+        <td align="center"><h1>Surname</h1></td>
+        <td align="center"><h1>Age</h1></td>
+        <td align="center"><h1>Password</h1></td>
+        <td align="center" colspan="2"><h1 >Operations</h1></td>
+    </tr>
+    <tr th:each="user:${listOfUsers}">
+        <td align="center" th:text="${user.getId()}"></td>
+        <td align="center" th:text="${user.getUsername()}"></td>
+        <td align="center" th:text="${user.getSurname()}"></td>
+        <td align="center" th:text="${user.getAge()}"></td>
+        <td align="center" th:text="${user.getPass()}"></td>
+        <td align="center">
+            <form th:action="@{/admin/{id}/update(id=${user.getId()})}" th:method="get">
+                <input type="hidden" name="_method" value="UPDATE" />
+                <button type="submit">update</button>
+            </form>
+            <br/>
+            <form th:action="@{/admin/delete/{id}(id=${user.getId()})}" th:method="post">
+                <input type="hidden" name="_method" value="DELETE" />
+                <button type="submit">delete</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<a href="/admin/new"><input type="button" value="Create new user"></a>
+<a href="/logout"><input type="button" value="Logout"></a>
+</body>
+</html>
