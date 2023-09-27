@@ -18,7 +18,7 @@ public class Init {
     private final UserService userService;
     private final RoleService roleService;
 
-    @Autowired
+
     public Init(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;

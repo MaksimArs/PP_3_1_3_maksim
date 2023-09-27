@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -20,7 +21,7 @@ public class AdminController {
     private final UserService userService;
     private final RoleService roleService;
 
-    @Autowired
+
     public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
@@ -47,23 +48,11 @@ public class AdminController {
     }
 
     @PostMapping(value = "/users")
-    public String create(@ModelAttribute("user") @Valid User user,
-                         BindingResult bindingResult,
-                         @RequestParam(value = "listRoleID", required = false, defaultValue = "2")
-                             List<String> listRoleID) {
+    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                         RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "redirect:/admin/new";
         }
-        Set<Role> set = new HashSet<>();
-        for (String roleID : listRoleID) {
-            Optional<Role> optionalRole = roleService.findById((Long.parseLong(roleID)));
-            Role role = new Role();
-            if (optionalRole.isPresent()) {
-                role = optionalRole.get();
-            }
-            set.add(role);
-        }
-        user.setRoles(set);
         userService.save(user);
         return "redirect:/admin/users";
     }
